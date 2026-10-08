@@ -16,14 +16,56 @@ Esta guía sirve para sacar esa clave de tu propia cuenta.
 
 ## Opción A: desde el navegador, sin instalar nada
 
-1. Abre el cuaderno [`clave_xiaomi.ipynb`](clave_xiaomi.ipynb) en Google Colab (hace falta una cuenta de Google).
-2. Pulsa **Entorno de ejecución → Ejecutar todo**.
-3. Aparecerá un enlace de Xiaomi («visit the following URL»). Ábrelo, inicia sesión **en la página de
-   Xiaomi** y vuelve al cuaderno: sigue solo.
-4. Copia los 64 caracteres que salen junto a `CLAVE:`.
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/buhho-crtl/xiaomi-scooter-cloud-key/blob/main/clave_xiaomi.ipynb)
 
-El programa se ejecuta en una máquina de Google asociada a tu cuenta de Google, no en un servidor
-nuestro, y se borra al cerrar el cuaderno.
+**Qué es Google Colab.** Es una web gratuita de Google que ejecuta programas de Python en un
+ordenador suyo y te enseña el resultado en una página. Un «cuaderno» es esa página: texto con
+instrucciones y unas cajas grises con el programa. No instalas nada y funciona igual desde un móvil.
+Solo necesitas una cuenta de Google (la de Gmail vale); no tiene que ser la misma que la de Xiaomi.
+
+Paso a paso:
+
+1. **Abre el cuaderno** con el botón «Open in Colab» de arriba. Si Colab te lo pide, inicia sesión
+   con tu cuenta de Google (botón **Acceder**, arriba a la derecha).
+2. **Ejecútalo.** En el menú de arriba: **Entorno de ejecución → Ejecutar todo** (en inglés,
+   *Runtime → Run all*). En el móvil el menú está en el icono **☰**.
+3. **Acepta el aviso.** Colab avisa de que el cuaderno no lo ha escrito Google: es lo normal con
+   cualquier cuaderno de GitHub. Pulsa **Ejecutar de todos modos**. El programa es
+   [`get_key.py`](get_key.py), son cien líneas y puedes leerlo antes.
+4. **Espera medio minuto.** La primera caja descarga este repositorio y lo que necesita. Mientras
+   trabaja, el botón de la caja gira; cuando acaba, sale una marca verde.
+5. **Inicia sesión en Xiaomi.** Debajo de la segunda caja aparecerá un texto como este:
+
+   ```
+   Alternatively you can visit the following URL:
+     https://account.xiaomi.com/...
+   ```
+
+   Abre ese enlace (se abre en otra pestaña), entra con la cuenta de Xiaomi que usas en Mi Home y
+   acepta. No hace falta copiar nada de vuelta: deja la pestaña de Colab abierta y el programa
+   continúa solo en unos segundos. El enlace caduca a los pocos minutos; si se te pasa, vuelve a
+   ejecutar.
+
+   Ignora la línea `QR code URL: http://127.0.0.1:31415`: esa dirección solo sirve cuando el
+   programa corre en tu propio ordenador.
+6. **Copia la clave.** Al terminar verás algo así:
+
+   ```
+   Patinete: Mi Scooter
+     modelo: xiaomi.scooter.…   región: de   id: 123456789
+
+     CLAVE: 3f9a…(64 letras y números)…c21e
+   ```
+
+   Copia los 64 caracteres que van después de `CLAVE:`, sin espacios. Si tienes varios patinetes,
+   sale una clave por cada uno.
+7. **Cierra la pestaña.** Ya puedes [pegar la clave en la app](#pegarla-en-la-app).
+
+Buscar en todas las regiones tarda uno o dos minutos; es normal que parezca parado.
+
+**Dónde se ejecuta.** En una máquina de Google asociada a tu cuenta de Google, no en un servidor
+nuestro. Tu contraseña de Xiaomi la escribes en la página de Xiaomi, no en el cuaderno. La máquina
+se borra al cerrar la pestaña y la clave no se guarda en ningún sitio.
 
 ## Opción B: en tu ordenador
 
@@ -87,9 +129,14 @@ scooter in Mi Home. This guide gets that key out of your own account.
 
 **You need:** the scooter added in Mi Home with your Xiaomi account (owned, not shared), and its PIN.
 
-**In the browser, nothing to install:** open [`clave_xiaomi.ipynb`](clave_xiaomi.ipynb) in Google
-Colab, choose *Runtime → Run all*, open the Xiaomi link it prints, sign in on Xiaomi's page, come
-back and copy the 64 characters next to `CLAVE:`.
+**In the browser, nothing to install:** Google Colab is a free Google site that runs Python programs
+on one of their machines and shows the output in a page (a "notebook"); you only need a Google
+account. [Open the notebook in Colab](https://colab.research.google.com/github/buhho-crtl/xiaomi-scooter-cloud-key/blob/main/clave_xiaomi.ipynb),
+choose *Runtime → Run all* and accept the "not authored by Google" warning (*Run anyway*). After
+about half a minute it prints *visit the following URL*: open that Xiaomi link, sign in on Xiaomi's
+page and leave the Colab tab open; it carries on by itself. Copy the 64 characters next to `CLAVE:`
+and close the tab. Ignore the `QR code URL: http://127.0.0.1:31415` line; it only works when
+running on your own computer.
 
 **On your computer** (Python 3.10+):
 
