@@ -9,8 +9,6 @@ set for the scooter in Mi Home.
     python get_key.py --lang es    # mensajes en castellano
     python get_key.py --password   # user and password in the terminal (captcha and e-mail code)
     python get_key.py --server de  # look in one region only (faster)
-    python get_key.py --login-region eu   # create the sign-in link in Europe (see --help)
-
 It only talks to Xiaomi's servers. It stores nothing on disk and sends nothing to third parties.
 """
 
@@ -19,7 +17,6 @@ import json
 import os
 import shutil
 import sys
-import time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -27,9 +24,12 @@ MESSAGES = {
     "en": {
         "unknown_region": "Unknown region: {server}. Valid ones: {valid}",
         "login_password": "Sign in with your Xiaomi account (the password is not shown while you type).\n",
-        "qr": "Scan this code with your phone's camera, or use the link below.\n",
-        "link_open": "Open this link and sign in on Xiaomi's page:\n",
-        "link_back": "Then come back here: the program carries on by itself.\n",
+        "signin_first": "1. First sign in to Xiaomi in your browser: https://account.xiaomi.com\n"
+                        "   (if you open the link below without being signed in, Xiaomi answers\n"
+                        "   \"Invalid request\").\n",
+        "qr": "2. Then scan this code with that same device, or use the link below.\n",
+        "link_open": "2. Then open this link in that same browser:\n",
+        "link_back": "3. Come back here: the program carries on by itself.\n",
         "login_failed": "\nCould not sign in.",
         "searching": "\nSigned in. Looking for scooters…\n",
         "searching_all": "\nSigned in. Looking for scooters in every region…\n",
@@ -50,9 +50,12 @@ MESSAGES = {
     "es": {
         "unknown_region": "Región desconocida: {server}. Valen: {valid}",
         "login_password": "Inicia sesión con tu cuenta de Xiaomi (la contraseña no se ve al escribir).\n",
-        "qr": "Escanea este código con la cámara del móvil, o usa el enlace de abajo.\n",
-        "link_open": "Abre este enlace e inicia sesión en la página de Xiaomi:\n",
-        "link_back": "Después vuelve aquí: el programa sigue solo.\n",
+        "signin_first": "1. Primero inicia sesión en Xiaomi en tu navegador: https://account.xiaomi.com\n"
+                        "   (si abres el enlace de abajo sin haber iniciado sesión, Xiaomi contesta\n"
+                        "   «Invalid request»).\n",
+        "qr": "2. Después escanea este código con ese mismo dispositivo, o usa el enlace de abajo.\n",
+        "link_open": "2. Después abre este enlace en ese mismo navegador:\n",
+        "link_back": "3. Vuelve aquí: el programa sigue solo.\n",
         "login_failed": "\nNo se pudo iniciar sesión.",
         "searching": "\nSesión iniciada. Buscando patinetes…\n",
         "searching_all": "\nSesión iniciada. Buscando patinetes en todas las regiones…\n",
@@ -69,16 +72,6 @@ MESSAGES = {
         "bad_response": "respuesta de Xiaomi: {response}",
         "no_key": "la respuesta no trae clave",
     },
-}
-
-# Xiaomi account data centres that hand out sign-in links.
-LOGIN_HOSTS = {
-    "auto": None,
-    "eu": "eu.account.xiaomi.com",
-    "sgp": "sgp.account.xiaomi.com",
-    "ru": "ru.account.xiaomi.com",
-    "in": "in.account.xiaomi.com",
-    "cn": "cn.account.xiaomi.com",
 }
 
 _lang = "en"
@@ -170,9 +163,6 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Get your scooter's Bluetooth key out of your Xiaomi account.")
     parser.add_argument("--lang", choices=sorted(MESSAGES), default="en",
                         help="language of the messages (default: en)")
-    parser.add_argument("--login-region", choices=list(LOGIN_HOSTS), default="auto",
-                        help="Xiaomi data centre that creates the sign-in link; auto = the nearest to "
-                             "where this runs (default: auto)")
     parser.add_argument("--password", action="store_true",
                         help="sign in with user and password in the terminal, instead of with a link")
     parser.add_argument("--server", help="look in this region only (cn, de, us, ru, tw, sg, in, i2)")
@@ -200,36 +190,6 @@ def main() -> int:
             drawn in the output instead.
             """
 
-            def login_step_1(self) -> bool:
-                """Asks for the link at the chosen data centre instead of the nearest one.
-
-                Xiaomi creates the link in the data centre closest to whoever asks for it. In Colab
-                that is a Google machine anywhere in the world, not the person who then signs in.
-                """
-                host = LOGIN_HOSTS[options.login_region]
-                if host is None:
-                    return super().login_step_1()
-                response = self._session.get(f"https://{host}/longPolling/loginUrl", params={
-                    "_qrsize": "480",
-                    "qs": "%3Fsid%3Dxiaomiio%26_json%3Dtrue",
-                    "callback": "https://sts.api.io.mi.com/sts",
-                    "_hasLogo": "false",
-                    "sid": "xiaomiio",
-                    "serviceParam": "",
-                    "_locale": "en_GB",
-                    "_dc": str(int(time.time() * 1000)),
-                })
-                if response.status_code != 200:
-                    return False
-                data = self.to_json(response.text)
-                if "qr" not in data:
-                    return False
-                self._qr_image_url = data["qr"]
-                self._login_url = data["loginUrl"]
-                self._long_polling_url = data["lp"]
-                self._timeout = data["timeout"]
-                return True
-
             def login_step_2(self) -> bool:
                 # The original requests Xiaomi's QR image before showing the link. The image is not
                 # used here, but the request is kept so that Xiaomi sees the same steps as before.
@@ -237,6 +197,7 @@ def main() -> int:
                     self._session.get(self._qr_image_url, timeout=10)
                 except Exception:
                     pass
+                print(t("signin_first"))
                 _print_qr(self._login_url)
                 print(t("link_open"))
                 print(f"  {self._login_url}\n")

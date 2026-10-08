@@ -23,6 +23,10 @@ and shows you the result in a page. A "notebook" is that page: text with instruc
 grey boxes with the program. You install nothing and it works the same from a phone. You only need
 a Google account (a Gmail one will do); it does not have to be the same as your Xiaomi one.
 
+> **Sign in to Xiaomi first.** Before you start, open <https://account.xiaomi.com> in your browser
+> and sign in with the account you use in Mi Home. If you open the program's link without being
+> signed in already, Xiaomi answers "Invalid request" or "QR code has expired".
+
 Step by step:
 
 1. **Open the notebook** with the "Open in Colab" button above. If Colab asks, sign in with your
@@ -33,19 +37,24 @@ Step by step:
    short file you can read first.
 4. **Wait half a minute.** The first box downloads this repository and what it needs. While it
    works, the button of the box spins; when it is done, a green tick shows up.
-5. **Sign in to Xiaomi.** Under the second box a text like this will appear:
+5. **Open Xiaomi's link.** Under the second box a text like this will appear:
 
    ```
-   Open this link and sign in on Xiaomi's page:
+   1. First sign in to Xiaomi in your browser: https://account.xiaomi.com
+      (if you open the link below without being signed in, Xiaomi answers
+      "Invalid request").
 
-     https://account.xiaomi.com/...
+   2. Then open this link in that same browser:
 
-   Then come back here: the program carries on by itself.
+     https://eu.account.xiaomi.com/longPolling/login?ticket=...
+
+   3. Come back here: the program carries on by itself.
    ```
 
-   Open that link (it opens in another tab), sign in with the Xiaomi account you use in Mi Home and
-   accept. There is nothing to copy back: leave the Colab tab open and the program carries on by
-   itself in a few seconds. The link expires after a few minutes; if you miss it, run again.
+   If you have not signed in to Xiaomi yet, do it now at <https://account.xiaomi.com>. Then open
+   the link in that same browser and accept. There is nothing to copy back: leave the Colab tab open
+   and the program carries on by itself in a few seconds. The link is valid once and for five
+   minutes; if you miss it, run again.
 6. **Copy the key.** When it finishes you will see something like this:
 
    ```
@@ -77,8 +86,9 @@ python3 -m venv .venv
 .venv/bin/python get_key.py                    # on Windows: .venv\Scripts\python
 ```
 
-Open the link that shows up, sign in to Xiaomi and copy the `KEY:`. The terminal also draws a QR of
-that same link, in case you prefer to sign in from your phone.
+Sign in at <https://account.xiaomi.com> first, then open the link that shows up in that same browser
+and copy the `KEY:`. The terminal also draws a QR of that same link, in case you prefer to use a
+phone where you are already signed in to Xiaomi.
 
 If you prefer to type user and password in the terminal (it handles captcha and e-mail code):
 `python get_key.py --password`. If you know your region, `--server de` is faster.
@@ -96,6 +106,7 @@ The key is stored encrypted on your phone. The PIN is only used to unlock it and
 
 | What happens | What to do |
 |---|---|
+| Xiaomi's page says "Invalid request" or "QR code has expired" | Sign in at <https://account.xiaomi.com> first, then run again and open the new link in that same browser. Each link is valid once and for five minutes. |
 | "The scooter did not accept the key or the PIN" | Check the PIN. If it is right, get the key again: Xiaomi changes it sometimes (for instance, after linking the scooter again). |
 | "There is no scooter in this account" | Check that you added it in Mi Home with this same account. |
 | It does not connect although the key is good | Close Mi Home on every nearby phone: the scooter takes one connection at a time. |
@@ -144,6 +155,10 @@ ordenador suyo y te enseña el resultado en una página. Un «cuaderno» es esa 
 instrucciones y unas cajas grises con el programa. No instalas nada y funciona igual desde un móvil.
 Solo necesitas una cuenta de Google (la de Gmail vale); no tiene que ser la misma que la de Xiaomi.
 
+> **Inicia sesión en Xiaomi antes.** Antes de empezar, abre <https://account.xiaomi.com> en tu
+> navegador y entra con la cuenta que usas en Mi Home. Si abres el enlace del programa sin haber
+> iniciado sesión ya, Xiaomi contesta «Invalid request» o «QR code has expired».
+
 Paso a paso:
 
 1. **Abre el cuaderno** con el botón «Open in Colab» de arriba. Si Colab te lo pide, inicia sesión
@@ -157,20 +172,24 @@ Paso a paso:
    [`get_key.py`](get_key.py), un fichero corto que puedes leer antes.
 4. **Espera medio minuto.** La primera caja descarga este repositorio y lo que necesita. Mientras
    trabaja, el botón de la caja gira; cuando acaba, sale una marca verde.
-5. **Inicia sesión en Xiaomi.** Debajo de la segunda caja aparecerá un texto como este:
+5. **Abre el enlace de Xiaomi.** Debajo de la segunda caja aparecerá un texto como este:
 
    ```
-   Abre este enlace e inicia sesión en la página de Xiaomi:
+   1. Primero inicia sesión en Xiaomi en tu navegador: https://account.xiaomi.com
+      (si abres el enlace de abajo sin haber iniciado sesión, Xiaomi contesta
+      «Invalid request»).
 
-     https://account.xiaomi.com/...
+   2. Después abre este enlace en ese mismo navegador:
 
-   Después vuelve aquí: el programa sigue solo.
+     https://eu.account.xiaomi.com/longPolling/login?ticket=...
+
+   3. Vuelve aquí: el programa sigue solo.
    ```
 
-   Abre ese enlace (se abre en otra pestaña), entra con la cuenta de Xiaomi que usas en Mi Home y
-   acepta. No hace falta copiar nada de vuelta: deja la pestaña de Colab abierta y el programa
-   continúa solo en unos segundos. El enlace caduca a los pocos minutos; si se te pasa, vuelve a
-   ejecutar.
+   Si aún no has iniciado sesión en Xiaomi, hazlo ahora en <https://account.xiaomi.com>. Después
+   abre el enlace en ese mismo navegador y acepta. No hace falta copiar nada de vuelta: deja la
+   pestaña de Colab abierta y el programa continúa solo en unos segundos. El enlace vale una vez y
+   durante cinco minutos; si se te pasa, vuelve a ejecutar.
 6. **Copia la clave.** Al terminar verás algo así (en inglés pone `KEY:` en vez de `CLAVE:`):
 
    ```
@@ -202,9 +221,10 @@ python3 -m venv .venv
 .venv/bin/python get_key.py --lang es          # en Windows: .venv\Scripts\python
 ```
 
-Abre el enlace que aparece, inicia sesión en Xiaomi y copia la `CLAVE:`. En la terminal sale
-también un QR de ese mismo enlace, por si prefieres iniciar sesión desde el móvil. Sin `--lang es`
-los mensajes salen en inglés.
+Inicia sesión antes en <https://account.xiaomi.com>, abre el enlace que aparece en ese mismo
+navegador y copia la `CLAVE:`. En la terminal sale también un QR de ese mismo enlace, por si
+prefieres usar un móvil donde ya tengas la sesión de Xiaomi abierta. Sin `--lang es` los mensajes
+salen en inglés.
 
 Si prefieres escribir usuario y contraseña en la terminal (admite captcha y código por correo):
 `python get_key.py --password`. Si sabes tu región, `--server de` va más rápido.
@@ -222,6 +242,7 @@ La clave se guarda cifrada en tu móvil. El PIN solo se usa para abrirla y no se
 
 | Qué pasa | Qué hacer |
 |---|---|
+| La página de Xiaomi dice «Invalid request» o «QR code has expired» | Inicia sesión antes en <https://account.xiaomi.com>, ejecuta otra vez y abre el enlace nuevo en ese mismo navegador. Cada enlace vale una vez y durante cinco minutos. |
 | «El patinete no ha aceptado la clave o el PIN» | Revisa el PIN. Si es el correcto, vuelve a sacar la clave: Xiaomi la cambia a veces (por ejemplo, al volver a vincular el patinete). |
 | «No hay ningún patinete en esta cuenta» | Comprueba que lo añadiste en Mi Home con esta misma cuenta. |
 | No conecta aunque la clave es buena | Cierra Mi Home en todos los móviles cercanos: el patinete solo admite una conexión a la vez. |
