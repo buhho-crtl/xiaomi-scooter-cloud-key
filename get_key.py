@@ -9,6 +9,7 @@ set for the scooter in Mi Home.
     python get_key.py --lang es    # mensajes en castellano
     python get_key.py --password   # user and password in the terminal (captcha and e-mail code)
     python get_key.py --server de  # look in one region only (faster)
+    python get_key.py --login-region eu   # create the sign-in link in Europe (see --help)
 
 It only talks to Xiaomi's servers. It stores nothing on disk and sends nothing to third parties.
 """
@@ -18,6 +19,7 @@ import json
 import os
 import shutil
 import sys
+import time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -67,6 +69,16 @@ MESSAGES = {
         "bad_response": "respuesta de Xiaomi: {response}",
         "no_key": "la respuesta no trae clave",
     },
+}
+
+# Xiaomi account data centres that hand out sign-in links.
+LOGIN_HOSTS = {
+    "auto": None,
+    "eu": "eu.account.xiaomi.com",
+    "sgp": "sgp.account.xiaomi.com",
+    "ru": "ru.account.xiaomi.com",
+    "in": "in.account.xiaomi.com",
+    "cn": "cn.account.xiaomi.com",
 }
 
 _lang = "en"
@@ -158,6 +170,9 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Get your scooter's Bluetooth key out of your Xiaomi account.")
     parser.add_argument("--lang", choices=sorted(MESSAGES), default="en",
                         help="language of the messages (default: en)")
+    parser.add_argument("--login-region", choices=list(LOGIN_HOSTS), default="auto",
+                        help="Xiaomi data centre that creates the sign-in link; auto = the nearest to "
+                             "where this runs (default: auto)")
     parser.add_argument("--password", action="store_true",
                         help="sign in with user and password in the terminal, instead of with a link")
     parser.add_argument("--server", help="look in this region only (cn, de, us, ru, tw, sg, in, i2)")
@@ -184,6 +199,36 @@ def main() -> int:
             that does not exist for someone running this in Colab. Here the QR of that same link is
             drawn in the output instead.
             """
+
+            def login_step_1(self) -> bool:
+                """Asks for the link at the chosen data centre instead of the nearest one.
+
+                Xiaomi creates the link in the data centre closest to whoever asks for it. In Colab
+                that is a Google machine anywhere in the world, not the person who then signs in.
+                """
+                host = LOGIN_HOSTS[options.login_region]
+                if host is None:
+                    return super().login_step_1()
+                response = self._session.get(f"https://{host}/longPolling/loginUrl", params={
+                    "_qrsize": "480",
+                    "qs": "%3Fsid%3Dxiaomiio%26_json%3Dtrue",
+                    "callback": "https://sts.api.io.mi.com/sts",
+                    "_hasLogo": "false",
+                    "sid": "xiaomiio",
+                    "serviceParam": "",
+                    "_locale": "en_GB",
+                    "_dc": str(int(time.time() * 1000)),
+                })
+                if response.status_code != 200:
+                    return False
+                data = self.to_json(response.text)
+                if "qr" not in data:
+                    return False
+                self._qr_image_url = data["qr"]
+                self._login_url = data["loginUrl"]
+                self._long_polling_url = data["lp"]
+                self._timeout = data["timeout"]
+                return True
 
             def login_step_2(self) -> bool:
                 # The original requests Xiaomi's QR image before showing the link. The image is not
