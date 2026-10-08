@@ -30,7 +30,7 @@ nuestro, y se borra al cerrar el cuaderno.
 Con Python 3.10 o posterior:
 
 ```bash
-git clone <URL de este repositorio>
+git clone https://github.com/buhho-crtl/xiaomi-scooter-cloud-key.git
 cd xiaomi-scooter-cloud-key
 python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt      # en Windows: .venv\Scripts\pip
