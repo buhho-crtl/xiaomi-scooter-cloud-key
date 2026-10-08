@@ -46,9 +46,6 @@ Step by step:
    Open that link (it opens in another tab), sign in with the Xiaomi account you use in Mi Home and
    accept. There is nothing to copy back: leave the Colab tab open and the program carries on by
    itself in a few seconds. The link expires after a few minutes; if you miss it, run again.
-
-   Above the link there is also a QR code drawn with characters: it leads to the same place, in
-   case you prefer to sign in from your phone. Use either one, not both.
 6. **Copy the key.** When it finishes you will see something like this:
 
    ```
@@ -80,7 +77,8 @@ python3 -m venv .venv
 .venv/bin/python get_key.py                    # on Windows: .venv\Scripts\python
 ```
 
-Open the link that shows up (or scan the QR), sign in to Xiaomi and copy the `KEY:`.
+Open the link that shows up, sign in to Xiaomi and copy the `KEY:`. The terminal also draws a QR of
+that same link, in case you prefer to sign in from your phone.
 
 If you prefer to type user and password in the terminal (it handles captcha and e-mail code):
 `python get_key.py --password`. If you know your region, `--server de` is faster.
@@ -173,9 +171,6 @@ Paso a paso:
    acepta. No hace falta copiar nada de vuelta: deja la pestaña de Colab abierta y el programa
    continúa solo en unos segundos. El enlace caduca a los pocos minutos; si se te pasa, vuelve a
    ejecutar.
-
-   Encima del enlace sale también un código QR dibujado con caracteres: lleva al mismo sitio, por
-   si prefieres iniciar sesión desde el móvil. Usa uno de los dos, no hacen falta ambos.
 6. **Copia la clave.** Al terminar verás algo así (en inglés pone `KEY:` en vez de `CLAVE:`):
 
    ```
@@ -207,8 +202,9 @@ python3 -m venv .venv
 .venv/bin/python get_key.py --lang es          # en Windows: .venv\Scripts\python
 ```
 
-Abre el enlace que aparece (o escanea el QR), inicia sesión en Xiaomi y copia la `CLAVE:`. Sin
-`--lang es` los mensajes salen en inglés.
+Abre el enlace que aparece, inicia sesión en Xiaomi y copia la `CLAVE:`. En la terminal sale
+también un QR de ese mismo enlace, por si prefieres iniciar sesión desde el móvil. Sin `--lang es`
+los mensajes salen en inglés.
 
 Si prefieres escribir usuario y contraseña en la terminal (admite captcha y código por correo):
 `python get_key.py --password`. Si sabes tu región, `--server de` va más rápido.

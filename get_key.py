@@ -81,8 +81,11 @@ def _print_qr(url: str) -> None:
     """Draws the QR of the link with text characters, if it fits; otherwise prints nothing.
 
     Two modules per character (upper half block), with explicit black and white so that it reads
-    the same on a dark or a light background.
+    the same on a dark or a light background. Only on a real terminal: the output of a notebook
+    leaves a gap between lines that cuts the code into stripes and no camera reads it.
     """
+    if not sys.stdout.isatty():
+        return
     try:
         import qrcode
     except ImportError:
