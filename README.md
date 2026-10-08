@@ -1,6 +1,129 @@
-# Clave de Xiaomi para tu patinete
+# Xiaomi key for your scooter
 
-*[English below](#english)*
+*[Instrucciones en castellano más abajo](#castellano)*
+
+Xiaomi Electric Scooter 4 Pro (and others of its generation) will not let an app connect without a
+**key** that Xiaomi keeps in your account. The app asks for it once, together with the **PIN** you
+set for the scooter in Mi Home.
+
+This guide gets that key out of your own account.
+
+## What you need
+
+- The scooter added in **Mi Home** with your Xiaomi account (yours, not shared by someone else).
+- The scooter's **PIN**: the one you set in Mi Home.
+- Five minutes.
+
+## Option A: in the browser, nothing to install
+
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/buhho-crtl/xiaomi-scooter-cloud-key/blob/main/clave_xiaomi.ipynb)
+
+**What Google Colab is.** A free Google site that runs Python programs on one of their computers
+and shows you the result in a page. A "notebook" is that page: text with instructions and a few
+grey boxes with the program. You install nothing and it works the same from a phone. You only need
+a Google account (a Gmail one will do); it does not have to be the same as your Xiaomi one.
+
+Step by step:
+
+1. **Open the notebook** with the "Open in Colab" button above. If Colab asks, sign in with your
+   Google account (**Sign in** button, top right).
+2. **Run it.** In the top menu: **Runtime → Run all**. On a phone the menu is under the **☰** icon.
+3. **Accept the warning.** Colab warns that the notebook was not authored by Google: that is normal
+   for any notebook from GitHub. Press **Run anyway**. The program is [`get_key.py`](get_key.py), a
+   short file you can read first.
+4. **Wait half a minute.** The first box downloads this repository and what it needs. While it
+   works, the button of the box spins; when it is done, a green tick shows up.
+5. **Sign in to Xiaomi.** Under the second box a text like this will appear:
+
+   ```
+   Open this link and sign in on Xiaomi's page:
+
+     https://account.xiaomi.com/...
+
+   Then come back here: the program carries on by itself.
+   ```
+
+   Open that link (it opens in another tab), sign in with the Xiaomi account you use in Mi Home and
+   accept. There is nothing to copy back: leave the Colab tab open and the program carries on by
+   itself in a few seconds. The link expires after a few minutes; if you miss it, run again.
+
+   Above the link there is also a QR code drawn with characters: it leads to the same place, in
+   case you prefer to sign in from your phone. Use either one, not both.
+6. **Copy the key.** When it finishes you will see something like this:
+
+   ```
+   Scooter: Mi Scooter
+     model: xiaomi.scooter.…   region: de   id: 123456789
+
+     KEY: 3f9a…(64 letters and digits)…c21e
+   ```
+
+   Copy the 64 characters after `KEY:`, without spaces. If you have several scooters, there is one
+   key for each.
+7. **Close the tab.** You can now [paste the key into the app](#paste-it-into-the-app).
+
+Looking in every region takes a minute or two; it is normal for it to look stuck.
+
+**Where it runs.** On a Google machine tied to your Google account, not on a server of ours. You
+type your Xiaomi password on Xiaomi's page, not in the notebook. The machine is wiped when you
+close the tab and the key is not stored anywhere.
+
+## Option B: on your computer
+
+With Python 3.10 or later:
+
+```bash
+git clone https://github.com/buhho-crtl/xiaomi-scooter-cloud-key.git
+cd xiaomi-scooter-cloud-key
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt      # on Windows: .venv\Scripts\pip
+.venv/bin/python get_key.py                    # on Windows: .venv\Scripts\python
+```
+
+Open the link that shows up (or scan the QR), sign in to Xiaomi and copy the `KEY:`.
+
+If you prefer to type user and password in the terminal (it handles captcha and e-mail code):
+`python get_key.py --password`. If you know your region, `--server de` is faster.
+
+## Paste it into the app
+
+1. Connect to the scooter. The app will say **"This scooter needs a key"**.
+2. Tap **Enter key and PIN**.
+3. Paste the key and type the Mi Home PIN.
+4. **Save and connect**.
+
+The key is stored encrypted on your phone. The PIN is only used to unlock it and is not stored.
+
+## If it does not work
+
+| What happens | What to do |
+|---|---|
+| "The scooter did not accept the key or the PIN" | Check the PIN. If it is right, get the key again: Xiaomi changes it sometimes (for instance, after linking the scooter again). |
+| "There is no scooter in this account" | Check that you added it in Mi Home with this same account. |
+| It does not connect although the key is good | Close Mi Home on every nearby phone: the scooter takes one connection at a time. |
+| You do not remember the PIN | Reset the scooter from Mi Home and link it again. Then get the key again. |
+
+## Privacy
+
+- The program only talks to Xiaomi's servers (`account.xiaomi.com` and `*.api.io.mi.com`).
+- With the link sign-in, you type your password on Xiaomi's site; the program does not see it.
+- It stores nothing on disk. The key is only shown on screen.
+- The key is useless on its own: it is encrypted with your PIN. Even so, **do not publish it** or
+  push it to a repository.
+
+## Credits and licences
+
+- `token_extractor.py` is by [Piotr Machowski](https://github.com/PiotrMachowski/Xiaomi-cloud-tokens-extractor)
+  (MIT), in the version included in [mehesbalazs/xiaomi-scooter-4-pro-2](https://github.com/mehesbalazs/xiaomi-scooter-4-pro-2).
+- The call that returns the key (`/share/askbluetoothkey`) comes from that same project (MIT).
+
+The original licences are in [`LICENSES/`](LICENSES/). This project is not affiliated with Xiaomi.
+
+---
+
+<a name="castellano"></a>
+
+# Clave de Xiaomi para tu patinete
 
 Los Xiaomi Electric Scooter 4 Pro (y otros de su generación) no dejan conectar a una app sin una
 **clave** que Xiaomi guarda en tu cuenta. La app te la pide una sola vez, junto con el **PIN** que le
@@ -27,18 +150,23 @@ Paso a paso:
 
 1. **Abre el cuaderno** con el botón «Open in Colab» de arriba. Si Colab te lo pide, inicia sesión
    con tu cuenta de Google (botón **Acceder**, arriba a la derecha).
-2. **Ejecútalo.** En el menú de arriba: **Entorno de ejecución → Ejecutar todo** (en inglés,
-   *Runtime → Run all*). En el móvil el menú está en el icono **☰**.
+2. **Ejecútalo.** Si quieres los mensajes en castellano, elige `es` en el desplegable `LANG` de la
+   primera caja (por defecto salen en inglés). Después, en el menú de arriba: **Entorno de
+   ejecución → Ejecutar todo** (en inglés, *Runtime → Run all*). En el móvil el menú está en el
+   icono **☰**.
 3. **Acepta el aviso.** Colab avisa de que el cuaderno no lo ha escrito Google: es lo normal con
    cualquier cuaderno de GitHub. Pulsa **Ejecutar de todos modos**. El programa es
-   [`get_key.py`](get_key.py), son cien líneas y puedes leerlo antes.
+   [`get_key.py`](get_key.py), un fichero corto que puedes leer antes.
 4. **Espera medio minuto.** La primera caja descarga este repositorio y lo que necesita. Mientras
    trabaja, el botón de la caja gira; cuando acaba, sale una marca verde.
 5. **Inicia sesión en Xiaomi.** Debajo de la segunda caja aparecerá un texto como este:
 
    ```
-   Alternatively you can visit the following URL:
+   Abre este enlace e inicia sesión en la página de Xiaomi:
+
      https://account.xiaomi.com/...
+
+   Después vuelve aquí: el programa sigue solo.
    ```
 
    Abre ese enlace (se abre en otra pestaña), entra con la cuenta de Xiaomi que usas en Mi Home y
@@ -46,9 +174,9 @@ Paso a paso:
    continúa solo en unos segundos. El enlace caduca a los pocos minutos; si se te pasa, vuelve a
    ejecutar.
 
-   Ignora la línea `QR code URL: http://127.0.0.1:31415`: esa dirección solo sirve cuando el
-   programa corre en tu propio ordenador.
-6. **Copia la clave.** Al terminar verás algo así:
+   Encima del enlace sale también un código QR dibujado con caracteres: lleva al mismo sitio, por
+   si prefieres iniciar sesión desde el móvil. Usa uno de los dos, no hacen falta ambos.
+6. **Copia la clave.** Al terminar verás algo así (en inglés pone `KEY:` en vez de `CLAVE:`):
 
    ```
    Patinete: Mi Scooter
@@ -76,10 +204,11 @@ git clone https://github.com/buhho-crtl/xiaomi-scooter-cloud-key.git
 cd xiaomi-scooter-cloud-key
 python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt      # en Windows: .venv\Scripts\pip
-.venv/bin/python get_key.py                    # en Windows: .venv\Scripts\python
+.venv/bin/python get_key.py --lang es          # en Windows: .venv\Scripts\python
 ```
 
-Abre el enlace que aparece, inicia sesión en Xiaomi y copia la `CLAVE:`.
+Abre el enlace que aparece (o escanea el QR), inicia sesión en Xiaomi y copia la `CLAVE:`. Sin
+`--lang es` los mensajes salen en inglés.
 
 Si prefieres escribir usuario y contraseña en la terminal (admite captcha y código por correo):
 `python get_key.py --password`. Si sabes tu región, `--server de` va más rápido.
@@ -116,41 +245,3 @@ La clave se guarda cifrada en tu móvil. El PIN solo se usa para abrirla y no se
 - La llamada que devuelve la clave (`/share/askbluetoothkey`) sale de ese mismo proyecto (MIT).
 
 Las licencias originales están en [`LICENSES/`](LICENSES/). Este proyecto no está afiliado a Xiaomi.
-
----
-
-<a name="english"></a>
-
-# Xiaomi key for your scooter
-
-Xiaomi Electric Scooter 4 Pro (and others of its generation) only accept an app that knows a **key**
-Xiaomi keeps in your account. The app asks for it once, together with the **PIN** you set for the
-scooter in Mi Home. This guide gets that key out of your own account.
-
-**You need:** the scooter added in Mi Home with your Xiaomi account (owned, not shared), and its PIN.
-
-**In the browser, nothing to install:** Google Colab is a free Google site that runs Python programs
-on one of their machines and shows the output in a page (a "notebook"); you only need a Google
-account. [Open the notebook in Colab](https://colab.research.google.com/github/buhho-crtl/xiaomi-scooter-cloud-key/blob/main/clave_xiaomi.ipynb),
-choose *Runtime → Run all* and accept the "not authored by Google" warning (*Run anyway*). After
-about half a minute it prints *visit the following URL*: open that Xiaomi link, sign in on Xiaomi's
-page and leave the Colab tab open; it carries on by itself. Copy the 64 characters next to `CLAVE:`
-and close the tab. Ignore the `QR code URL: http://127.0.0.1:31415` line; it only works when
-running on your own computer.
-
-**On your computer** (Python 3.10+):
-
-```bash
-python3 -m venv .venv
-.venv/bin/pip install -r requirements.txt
-.venv/bin/python get_key.py          # add --password to type credentials in the terminal
-```
-
-**In the app:** connect to the scooter, tap *Enter key and PIN*, paste the key, type the Mi Home PIN,
-*Save and connect*.
-
-**If the scooter rejects it:** check the PIN; if it is right, fetch the key again (Xiaomi rotates it,
-for instance after re-linking the scooter). Close Mi Home on nearby phones: the scooter takes one
-connection at a time.
-
-The tool only talks to Xiaomi's servers and stores nothing. Do not publish your key.
