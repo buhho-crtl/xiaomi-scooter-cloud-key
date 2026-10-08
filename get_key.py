@@ -186,6 +186,12 @@ def main() -> int:
             """
 
             def login_step_2(self) -> bool:
+                # The original requests Xiaomi's QR image before showing the link. The image is not
+                # used here, but the request is kept so that Xiaomi sees the same steps as before.
+                try:
+                    self._session.get(self._qr_image_url, timeout=10)
+                except Exception:
+                    pass
                 _print_qr(self._login_url)
                 print(t("link_open"))
                 print(f"  {self._login_url}\n")
